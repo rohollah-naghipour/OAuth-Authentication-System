@@ -1,0 +1,207 @@
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px 35px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #24292e 0%, #1a1e22 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            margin: 0 auto 15px;
+            border: 4px solid white;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .profile-header h2 {
+            font-size: 24px;
+            color: #2d3748;
+        }
+        
+        .profile-header .email {
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .info-item {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .info-item .label {
+            font-size: 11px;
+            color: #a0aec0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .info-item .value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-top: 5px;
+        }
+        
+        .provider-badge {
+            display: inline-block;
+            background: #24292e;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin: 10px auto;
+        }
+        
+        .provider-badge i {
+            margin-right: 8px;
+        }
+        
+        .btn-back {
+            display: block;
+            text-align: center;
+            padding: 14px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .btn-back:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-logout {
+            display: block;
+            text-align: center;
+            padding: 14px;
+            background: #fc8181;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .btn-logout:hover {
+            background: #f56565;
+            transform: translateY(-2px);
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        @media (max-width: 500px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            .card {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            
+            <div class="profile-header">
+                <div class="avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h2>{{ user.username }}</h2>
+                <div class="email">{{ user.email }}</div>
+            </div>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="label">Username</div>
+                    <div class="value">{{ user.username }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">Email</div>
+                    <div class="value">{{ user.email }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">Joined</div>
+                    <div class="value">{{ user.date_joined|date:"Y/m/d" }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">Last Login</div>
+                    <div class="value">{{ user.last_login|date:"Y/m/d" }}</div>
+                </div>
+            </div>
+            
+            {% if user.socialaccount_set.all %}
+                <div class="text-center">
+                    <div class="provider-badge">
+                        <i class="fab fa-github"></i>
+                        Connected to GitHub
+                    </div>
+                </div>
+            {% endif %}
+            
+            <a href="/" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <a href="/accounts/logout/" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+            
+        </div>
+    </div>
+</body>
+</html>

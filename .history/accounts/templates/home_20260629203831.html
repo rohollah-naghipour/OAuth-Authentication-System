@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیستم ورود با OAuth</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ===== Reset & Base ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        /* ===== Container ===== */
+        .container {
+            width: 100%;
+            max-width: 480px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px 35px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* ===== Header ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        
+        .logo {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+        
+        .header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        /* ===== User Info ===== */
+        .user-info {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            margin: 0 auto 15px;
+            border: 3px solid white;
+        }
+        
+        .user-info h3 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .user-info .email {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .user-info .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 4px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        
+        /* ===== OAuth Buttons ===== */
+        .oauth-section {
+            margin: 25px 0;
+        }
+        
+        .oauth-section .divider {
+            text-align: center;
+            color: #a0aec0;
+            font-size: 13px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .oauth-section .divider::before,
+        .oauth-section .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background: #e2e8f0;
+        }
+        
+        .oauth-section .divider::before { left: 0; }
+        .oauth-section .divider::after { right: 0; }
+        
+        .btn-oauth {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-oauth i {
+            font-size: 22px;
+            width: 30px;
+        }
+        
+        .btn-oauth:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-oauth:active {
+            transform: scale(0.98);
+        }
+        
+        /* Colors for each provider */
+        .btn-github {
+            background: #24292e;
+        }
+        .btn-github:hover {
+            background: #1a1e22;
+        }
+        
+        .btn-google {
+            background: #ea4335;
+        }
+        .btn-google:hover {
+            background: #d33426;
+        }
+        
+        .btn-microsoft {
+            background: #00a4ef;
+        }
+        .btn-microsoft:hover {
+            background: #008fd6;
+        }
+        
+        .btn-twitter {
+            background: #1da1f2;
+        }
+        .btn-twitter:hover {
+            background: #1991db;
+        }
+        
+        .btn-linkedin {
+            background: #0a66c2;
+        }
+        .btn-linkedin:hover {
+            background: #0957a8;
+        }
+        
+        .btn-facebook {
+            background: #1877f2;
+        }
+        .btn-facebook:hover {
+            background: #166fe5;
+        }
+        
+        .btn-telegram {
+            background: #0088cc;
+        }
+        .btn-telegram:hover {
+            background: #0077b3;
+        }
+        
+        /* ===== Action Buttons ===== */
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn-action {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .btn-action.primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-action.primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-action.danger {
+            background: #fc8181;
+            color: white;
+        }
+        
+        .btn-action.danger:hover {
+            background: #f56565;
+            transform: translateY(-2px);
+        }
+        
+        .btn-action.outline {
+            background: transparent;
+            color: #4a5568;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .btn-action.outline:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        /* ===== Responsive ===== */
+        @media (max-width: 500px) {
+            .card {
+                padding: 25px 20px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .btn-oauth {
+                font-size: 14px;
+                padding: 12px;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+        }
+        
+        /* ===== Animation ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .card {
+            animation: fadeInUp 0.6s ease;
+        }
+        
+        .btn-oauth {
+            animation: fadeInUp 0.6s ease backwards;
+        }
+        
+        .btn-oauth:nth-child(1) { animation-delay: 0.1s; }
+        .btn-oauth:nth-child(2) { animation-delay: 0.2s; }
+        .btn-oauth:nth-child(3) { animation-delay: 0.3s; }
+        .btn-oauth:nth-child(4) { animation-delay: 0.4s; }
+        .btn-oauth:nth-child(5) { animation-delay: 0.5s; }
+        .btn-oauth:nth-child(6) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            
+            <!-- ===== HEADER ===== -->
+            <div class="header">
+                <div class="logo">🔐</div>
+                <h1>ورود به حساب</h1>
+                <p>با استفاده از سرویس‌های زیر وارد شوید</p>
+            </div>
+            
+            <!-- ===== USER INFO (اگر وارد شده باشد) ===== -->
+            {% if user.is_authenticated %}
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h3>{{ user.username }}</h3>
+                <div class="email">{{ user.email }}</div>
+                
+                {% if user.socialaccount_set.all %}
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i>
+                        وارد شده با {{ user.socialaccount_set.all.0.provider|title }}
+                    </div>
+                {% endif %}
+            </div>
+            {% endif %}
+            
+            <!-- ===== OAuth BUTTONS ===== -->
+            <div class="oauth-section">
+                
+                {% if not user.is_authenticated %}
+                    <!-- GitHub -->
+                    <a href="{% provider_login_url 'github' %}" class="btn-oauth btn-github">
+                        <i class="fab fa-github"></i>
+                        ورود با گیت‌هاب
+                        <span style="margin-right: auto; font-size: 12px; opacity: 0.7;">GitHub</span>
+                    </a>
+                    
+                    <!-- Google -->
+                    <a href="{% provider_login_url 'google' %}" class="btn-oauth btn-google">
+                        <i class="fab fa-google"></i>
+                        ورود با گوگل
+                        <span style="margin-right: auto; font-size: 12px; opacity: 0.7;">Google</span>
+                    </a>
+                    
+                    <!-- Microsoft -->
+                    <a href="{% provider_login_url 'microsoft' %}" class="btn-oauth btn-microsoft">
+                        <i class="fab fa-microsoft"></i>
+                        ورود با مایکروسافت
+                        <span style="margin-right: auto; font-size: 12px; opacity: 0.7;">Microsoft</span>
+                    </a>
+                    
+                    <!-- Twitter -->
+                    <a href="{% provider_login_url 'twitter' %}" class="btn-oauth btn-twitter">
+                        <i class="fab fa-twitter"></i>
+                        ورود با توییتر
+                        <span style="margin-right: auto; font-size: 12px; opacity: 0.7;">Twitter</span>
+                    </a>
+                    
+                    <!-- LinkedIn -->
+                    <a href="{% provider_login_url 'linkedin' %}" class="btn-oauth btn-linkedin">
+                        <i class="fab fa-linkedin-in"></i>
+                        ورود با لینکدین
+                        <span style="margin-right: auto; font-size: 12px; opacity: 0.7;">LinkedIn</span>
+                    </a>
+                    
+                    <!-- Facebook -->
+                    <a href="{% provider_login_url 'facebook' %}" class="btn-oauth btn-facebook">
+                        <i class="fab fa-facebook-f"></i>
+                        ورود با فیسبوک
+                        <span style="margin-right: auto; font-size: 12px; opacity: 0.7;">Facebook</span>
+                    </a>
+                    
+                    <!-- Telegram (اگر داشته باشید) -->
+                    <!-- <a href="{% provider_login_url 'telegram' %}" class="btn-oauth btn-telegram">
+                        <i class="fab fa-telegram-plane"></i>
+                        ورود با تلگرام
+                        <span style="margin-right: auto; font-size: 12px; opacity: 0.7;">Telegram</span>
+                    </a> -->
+                    
+                    <div class="divider">یا با ایمیل و رمز عبور</div>
+                    
+                    <div style="display: flex; gap: 10px;">
+                        <a href="/accounts/login/" class="btn-action primary" style="flex: 1;">
+                            <i class="fas fa-sign-in-alt"></i> ورود
+                        </a>
+                        <a href="/accounts/signup/" class="btn-action outline" style="flex: 1;">
+                            <i class="fas fa-user-plus"></i> ثبت‌نام
+                        </a>
+                    </div>
+                    
+                {% else %}
+                    <!-- ===== ACTIONS (وقتی وارد شده) ===== -->
+                    <div class="actions">
+                        <a href="/profile/" class="btn-action primary">
+                            <i class="fas fa-user"></i> پروفایل
+                        </a>
+                        <a href="/accounts/logout/" class="btn-action danger">
+                            <i class="fas fa-sign-out-alt"></i> خروج
+                        </a>
+                    </div>
+                {% endif %}
+                
+            </div>
+            
+            <!-- ===== FOOTER ===== -->
+            <div style="text-align: center; margin-top: 25px; font-size: 12px; color: #a0aec0;">
+                <i class="fas fa-shield-alt"></i>
+                امنیت داده‌ها با OAuth 2.0
+                <span style="margin: 0 8px;">•</span>
+                <i class="fas fa-lock"></i>
+                رمزنگاری SSL
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>خانه</title>
+    <style>
+        body { font-family: Arial; text-align: center; padding: 50px; }
+        .btn { display: inline-block; padding: 10px 20px; background: #24292e; color: white; text-decoration: none; border-radius: 5px; margin: 5px; }
+        .btn-danger { background: #dc3545; }
+    </style>
+</head>
+<body>
+    <h1>خوش آمدید!</h1>
+    
+    {% if user.is_authenticated %}
+        <p>سلام {{ user.username }}!</p>
+        <a href="{% url 'profile' %}" class="btn">پروفایل</a>
+        <a href="{% url 'account_logout' %}" class="btn btn-danger">خروج</a>
+    {% else %}
+        <a href="{% url 'account_login' %}" class="btn">ورود</a>
+    {% endif %}
+</body>
+</html>

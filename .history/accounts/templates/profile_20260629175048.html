@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>پروفایل</title>
+    <style>
+        body { font-family: Arial; text-align: center; padding: 50px; }
+        .btn { display: inline-block; padding: 10px 20px; background: #24292e; color: white; text-decoration: none; border-radius: 5px; margin: 5px; }
+        .btn-danger { background: #dc3545; }
+    </style>
+</head>
+<body>
+    <h1>پروفایل کاربری</h1>
+    <p><strong>نام کاربری:</strong> {{ user.username }}</p>
+    <p><strong>ایمیل:</strong> {{ user.email }}</p>
+    
+    {% if user.socialaccount_set.all %}
+        <p>وارد شده با: {{ user.socialaccount_set.all.0.provider }}</p>
+    {% endif %}
+    
+    <a href="{% url 'home' %}" class="btn">خانه</a>
+    <a href="{% url 'account_logout' %}" class="btn btn-danger">خروج</a>
+</body>
+</html>

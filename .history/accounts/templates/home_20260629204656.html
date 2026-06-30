@@ -1,0 +1,299 @@
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 420px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px 35px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        
+        .logo {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        .user-info {
+            background: linear-gradient(135deg, #24292e 0%, #1a1e22 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            margin: 0 auto 15px;
+            border: 3px solid white;
+        }
+        
+        .user-info h3 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .user-info .email {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .user-info .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 4px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        
+        .btn-github {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            background: #24292e;
+            margin-bottom: 12px;
+        }
+        
+        .btn-github:hover {
+            background: #1a1e22;
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-github i {
+            font-size: 24px;
+        }
+        
+        .btn-action {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .btn-action.primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-action.primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-action.danger {
+            background: #fc8181;
+            color: white;
+        }
+        
+        .btn-action.danger:hover {
+            background: #f56565;
+            transform: translateY(-2px);
+        }
+        
+        .btn-action.outline {
+            background: transparent;
+            color: #4a5568;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .btn-action.outline:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        .divider {
+            text-align: center;
+            color: #a0aec0;
+            font-size: 13px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 35%;
+            height: 1px;
+            background: #e2e8f0;
+        }
+        
+        .divider::before { left: 0; }
+        .divider::after { right: 0; }
+        
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 12px;
+            color: #a0aec0;
+        }
+        
+        .footer i {
+            margin: 0 4px;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .card {
+            animation: fadeInUp 0.6s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            
+            <!-- Header -->
+            <div class="header">
+                <div class="logo">🐙</div>
+                <h1>GitHub Login</h1>
+                <p>Sign in with your GitHub account</p>
+            </div>
+            
+            <!-- User Info (if logged in) -->
+            {% if user.is_authenticated %}
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h3>{{ user.username }}</h3>
+                <div class="email">{{ user.email }}</div>
+                
+                {% if user.socialaccount_set.all %}
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i>
+                        Signed in with GitHub
+                    </div>
+                {% endif %}
+            </div>
+            {% endif %}
+            
+            <!-- GitHub Button -->
+            {% if not user.is_authenticated %}
+                <a href="{% provider_login_url 'github' %}" class="btn-github">
+                    <i class="fab fa-github"></i>
+                    Sign in with GitHub
+                </a>
+                
+                <div class="divider">or</div>
+                
+                <div style="display: flex; gap: 10px;">
+                    <a href="/accounts/login/" class="btn-action primary" style="flex: 1;">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    <a href="/accounts/signup/" class="btn-action outline" style="flex: 1;">
+                        <i class="fas fa-user-plus"></i> Sign Up
+                    </a>
+                </div>
+                
+            {% else %}
+                <!-- Actions when logged in -->
+                <a href="/profile/" class="btn-action primary">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+                <a href="/accounts/logout/" class="btn-action danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            {% endif %}
+            
+            <!-- Footer -->
+            <div class="footer">
+                <i class="fas fa-shield-alt"></i>
+                Secure OAuth 2.0
+                <span style="margin: 0 8px;">•</span>
+                <i class="fas fa-lock"></i>
+                SSL Encrypted
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
