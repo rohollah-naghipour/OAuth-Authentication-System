@@ -116,7 +116,7 @@ Made with ❤️ for learning web application security and OAuth implementation
 
 
 <p align="center">
-  <img src="oAuth\github_oauth_project\test.png" alt="OAuth Banner" width="800"/>
+  <img src="images/oauth-banner.png" alt="OAuth Banner" width="800"/>
 </p>
 
 <h1 align="center">🔐 GitHub OAuth Authentication System</h1>
