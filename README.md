@@ -113,3 +113,21 @@ Push to branch
 Open Pull Request
 
 Made with ❤️ for learning web application security and OAuth implementation
+
+
+<p align="center">
+  <img src="oAuth\github_oauth_project\test.png" alt="OAuth Banner" width="800"/>
+</p>
+
+<h1 align="center">🔐 GitHub OAuth Authentication System</h1>
+
+<p align="center">
+  <strong>A complete Django-based authentication system with GitHub OAuth integration</strong>
+</p>
+
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#configuration">Configuration</a> •
+  <a href="#security">Security</a>
+</p>
